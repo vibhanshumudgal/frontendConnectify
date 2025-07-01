@@ -3,7 +3,7 @@ import Body from "./Body";
 import LoginLogout from "./LoginLogout";
 import Feed from "./Feed";
 import { Provider } from "react-redux";
-import appstore from "../Utils/Appstore";
+import appstore from "../Utils/AppStore";
 import EditProfile from "./EditProfile";
 import Connections from "./Connections";
 import { Invitations } from "./Invitations";
