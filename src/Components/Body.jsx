@@ -18,6 +18,8 @@ const Body = () => {
         const res = await axios.get(Base_Url + "/profile/view", {
           withCredentials: true,
         });
+        if(!res) throw new Error("plz log in");
+        
         dispatch(addUser(res.data));
       } catch (err) {
         dispatch(removeUser());
