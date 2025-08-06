@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
@@ -13,9 +13,10 @@ const Navbar = () => {
   const location = useLocation();
   const user = useSelector((store) => store.user);
   const isAuthenticated = Object.keys(user || {}).length > 0;
-  
+  const [isLoggingOut, setIsLoggingOut] = useState(false); // 🔄
 
   const logout = async () => {
+    setIsLoggingOut(true);
     try {
       await axios.post(`${Base_Url}/logout`, {}, { withCredentials: true });
       dispatch(removeUser());
@@ -24,6 +25,8 @@ const Navbar = () => {
       navigate("/login");
     } catch (err) {
       console.error("Logout error:", err.message);
+    } finally {
+      setIsLoggingOut(false);
     }
   };
 
@@ -34,8 +37,21 @@ const Navbar = () => {
     { label: "Profile", path: "/update/profile" },
   ];
 
+  if (isLoggingOut) {
+    return (
+      <div className="fixed inset-0 bg-gray-900 text-white flex items-center justify-center z-50">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-blue-400 border-dashed rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-lg font-semibold animate-pulse">
+            Logging you out...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <nav className={`fixed w-full z-50  bg-gray-900 shadow py-2 transition-all`}>
+    <nav className="fixed w-full z-50 bg-gray-900 shadow py-2 transition-all">
       <div className="container mx-auto flex justify-between items-center px-4">
         {/* Logo */}
         <Link
@@ -78,18 +94,16 @@ const Navbar = () => {
               </div>
             </>
           ) : (
-            <>
-              <Link
-                to="/login"
-                className={`px-4 py-2 rounded-lg ${
-                  location.pathname === "/login"
-                    ? "bg-blue-600 text-white"
-                    : "text-gray-300 hover:bg-gray-800"
-                } transition`}
-              >
-                Login
-              </Link>
-            </>
+            <Link
+              to="/login"
+              className={`px-4 py-2 rounded-lg ${
+                location.pathname === "/login"
+                  ? "bg-blue-600 text-white"
+                  : "text-gray-300 hover:bg-gray-800"
+              } transition`}
+            >
+              Login
+            </Link>
           )}
         </div>
       </div>

@@ -13,7 +13,7 @@ const App = () => {
     <Provider store={appstore}>
       <Router>
         <Routes>
-          <Route path="/" element={<Body />}>
+          <Route path="" element={<Body />}>
           
             <Route path="/login" element={<LoginLogout />} />
             <Route path="/user/feed" element={<Feed />} />
